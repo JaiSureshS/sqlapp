@@ -40,22 +40,13 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
-
+    
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: .net-app
       
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A9E3B9E0F78B4EF9A0CC16769A67F4A0 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C0012E705E294C1297D7A4F2D265B289 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_10C40A9572CC42F9808FF19FBAE5AF84 }}
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -63,4 +54,4 @@ jobs:
           app-name: 'JaiCloudLearnWebAppGitHub'
           slot-name: 'Production'
           package: .
-          
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ACC445C6E8564DB39730E0716F8B6C8D }}
